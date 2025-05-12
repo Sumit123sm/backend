@@ -31,7 +31,7 @@ export const createEvents = async (req, res, next) => {
 export const getAllEvents = async (req, res, next) => {
   try {
    const event = await Events.find();
-   console.log("Fetched events:", event);
+  //  console.log("Fetched events:", event);
   res.status(200).json({
     success: true,
     event,
