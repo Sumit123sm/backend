@@ -2,19 +2,21 @@ import Attendance from "../models/attendanceSchema.js";
 import { handleValidationError } from "../middlewares/errorHandler.js";
 
 export const markAttendance = async (req, res, next) => {
-  const { attendanceData } = req.body;
+  const { attendanceRecords } = req.body;
+  console.log(attendanceRecords);
+  
   try {
-    if (!attendanceData || !Array.isArray(attendanceData) || attendanceData.length === 0) {
+    if (!attendanceRecords || !Array.isArray(attendanceRecords) || attendanceRecords.length === 0) {
       handleValidationError("Attendance data is missing or invalid!", 400);
     }
-    const attendanceRecords = await Promise.all(attendanceData.map(async (record) => {
-      const { student, status } = record;
-      return await Attendance.create({ student, status });
+    const promiseRes = await Promise.all(attendanceRecords.map(async (record) => {
+      const { name, status } = record;
+      return await Attendance.create({ name, status });
     }));
     res.status(200).json({
       success: true,
       message: "Attendance marked successfully!",
-      attendanceRecords
+      promiseRes
     });
   } catch (err) {
     next(err);
@@ -23,10 +25,10 @@ export const markAttendance = async (req, res, next) => {
 
 export const getAllAttendance = async (req, res, next) => {
   try {
-    const attendanceRecords = await Attendance.find().populate('student', 'name registrationNumber grade');
+    const attendanceRecords = await Attendance.find(); // Removed populate unless `student` is a ref
     res.status(200).json({
       success: true,
-      attendanceRecords
+      attendance: attendanceRecords
     });
   } catch (err) {
     next(err);

@@ -21,7 +21,8 @@ config({ path: './config/config.env' });
 
 // ✅ Fixed: CORS configuration for frontend requests
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    // origin: process.env.FRONTEND_URL,
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true // Important if using authentication
@@ -30,7 +31,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Fixed: Moved error handling middleware after routes
+// ✅ Fixed: Moved error handling middleware after Any problem? So if any problem sorry only call me. routes
 // Routes
 app.use("/api", authRoutes);
 app.use("/api/v1/students", studentRouter);
